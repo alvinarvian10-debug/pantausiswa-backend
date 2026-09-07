@@ -20,6 +20,7 @@ export class InventarisService {
         jumlahTersedia: dto.jumlahTotal,
         lokasi: dto.lokasi ?? null,
         fotoUrl: dto.fotoUrl ?? null,
+        icon: dto.icon ?? null,
       },
     });
   }
@@ -57,7 +58,7 @@ export class InventarisService {
     if (!barang) throw new NotFoundException('Barang tidak ditemukan');
 
     const data: Record<string, unknown> = {};
-    for (const key of ['nama', 'kode', 'kategori', 'lokasi', 'fotoUrl'] as const) {
+    for (const key of ['nama', 'kode', 'kategori', 'lokasi', 'fotoUrl', 'icon'] as const) {
       if (dto[key] !== undefined) data[key] = dto[key];
     }
     if (dto.kondisi !== undefined) data.kondisi = dto.kondisi;

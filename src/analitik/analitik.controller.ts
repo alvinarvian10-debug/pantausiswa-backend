@@ -32,4 +32,9 @@ export class AnalitikController {
   statistikTugas() {
     return this.service.statistikTugas();
   }
+
+  @Get('nilai')
+  statistikNilai() {
+    return this.service.statistikNilai();
+  }
 }

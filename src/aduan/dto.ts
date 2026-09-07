@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class CreateAduanDto {
   @IsString()
@@ -21,6 +21,10 @@ export class CreateAduanDto {
   @IsOptional()
   @IsString()
   lampiranUrl?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isAnonim?: boolean;
 }
 
 export class UpdateAduanDto {

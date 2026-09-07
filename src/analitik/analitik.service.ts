@@ -10,15 +10,27 @@ export class AnalitikService {
   async ringkasan() {
     const today = new Date(new Date().toISOString().slice(0, 10));
 
-    const [totalSiswa, totalGuru, totalKelas, presensiHariIni, tugasAktif, aduanBaru] =
-      await this.prisma.$transaction([
-        this.prisma.siswa.count(),
-        this.prisma.guru.count(),
-        this.prisma.kelas.count(),
-        this.prisma.presensi.findMany({ where: { tanggal: today } }),
-        this.prisma.tugas.count({ where: { tenggat: { gte: new Date() } } }),
-        this.prisma.aduan.count({ where: { status: 'BARU' } }),
-      ]);
+    const [
+      totalSiswa,
+      totalGuru,
+      totalKelas,
+      presensiHariIni,
+      tugasAktif,
+      aduanBaru,
+      totalTugas,
+      totalPeminjaman,
+      totalAduan,
+    ] = await this.prisma.$transaction([
+      this.prisma.siswa.count(),
+      this.prisma.guru.count(),
+      this.prisma.kelas.count(),
+      this.prisma.presensi.findMany({ where: { tanggal: today } }),
+      this.prisma.tugas.count({ where: { tenggat: { gte: new Date() } } }),
+      this.prisma.aduan.count({ where: { status: 'BARU' } }),
+      this.prisma.tugas.count(),
+      this.prisma.peminjaman.count(),
+      this.prisma.aduan.count(),
+    ]);
 
     const hadir = presensiHariIni.filter(
       (p) => p.status === 'HADIR' || p.status === 'TERLAMBAT',
@@ -37,6 +49,9 @@ export class AnalitikService {
       },
       tugasAktif,
       aduanBaru,
+      totalTugas,
+      totalPeminjaman,
+      totalAduan,
     };
   }
 
@@ -150,5 +165,37 @@ export class AnalitikService {
       tenggat: t.tenggat,
       jumlahPengumpulan: t._count.kumpulan,
     }));
+  }
+
+  /** Rata-rata nilai keseluruhan + per mapel (dari pengumpulan yang dinilai). */
+  async statistikNilai() {
+    const dinilai = await this.prisma.pengumpulanTugas.findMany({
+      where: { nilai: { not: null } },
+      select: {
+        nilai: true,
+        tugas: { select: { mapel: { select: { nama: true } } } },
+      },
+    });
+
+    const perMapel = new Map<string, { total: number; count: number }>();
+    let total = 0;
+    for (const s of dinilai) {
+      total += s.nilai ?? 0;
+      const nama = s.tugas.mapel.nama;
+      const agg = perMapel.get(nama) ?? { total: 0, count: 0 };
+      agg.total += s.nilai ?? 0;
+      agg.count += 1;
+      perMapel.set(nama, agg);
+    }
+
+    return {
+      rataRata: dinilai.length > 0 ? Math.round(total / dinilai.length) : 0,
+      totalDinilai: dinilai.length,
+      perMapel: [...perMapel.entries()].map(([mapel, v]) => ({
+        mapel,
+        rata: Math.round(v.total / v.count),
+        count: v.count,
+      })),
+    };
   }
 }

@@ -19,6 +19,7 @@ export class AduanService {
         kategori: dto.kategori as never,
         prioritas: (dto.prioritas as never) ?? 'SEDANG',
         lampiranUrl: dto.lampiranUrl ?? null,
+        isAnonim: dto.isAnonim ?? false,
       },
       include: { pelapor: { select: { nama: true, role: true } } },
     });
@@ -69,7 +70,7 @@ export class AduanService {
       where.prioritas = opts.prioritas;
     }
 
-    const [total, data] = await this.prisma.$transaction([
+    const [total, rows] = await this.prisma.$transaction([
       this.prisma.aduan.count({ where }),
       this.prisma.aduan.findMany({
         where,
@@ -80,8 +81,12 @@ export class AduanService {
       }),
     ]);
 
+    // Hormati anonimitas: nama pelapor disamarkan di daftar admin.
     return {
-      data,
+      data: rows.map((r) => ({
+        ...r,
+        pelapor: r.isAnonim ? null : r.pelapor,
+      })),
       meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
   }

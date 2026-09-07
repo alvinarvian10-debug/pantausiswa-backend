@@ -211,8 +211,10 @@ export class TugasService {
       where: { siswaId: siswa.id, nilai: { not: null } },
       include: {
         tugas: {
-          select: { judul: true },
-          include: { mapel: { select: { nama: true } } },
+          select: {
+            judul: true,
+            mapel: { select: { nama: true } },
+          },
         },
       },
       orderBy: { dinilaiAt: 'desc' },

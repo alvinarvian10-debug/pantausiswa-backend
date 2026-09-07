@@ -155,7 +155,28 @@ export class PeminjamanService {
     if (peminjaman.status !== 'DIPINJAM') {
       throw new BadRequestException('Peminjaman ini belum disetujui/sudah selesai');
     }
+    return this.doReturn(peminjaman.id, peminjaman.barangId, peminjaman.jumlah);
+  }
 
+  /** Siswa mengembalikan pinjamannya sendiri (harus miliknya + DIPINJAM). */
+  async returnMandiri(id: number, siswaUserId: number) {
+    const siswa = await this.prisma.siswa.findUnique({
+      where: { userId: siswaUserId },
+    });
+    if (!siswa) throw new ForbiddenException('Akun ini bukan siswa aktif');
+    const peminjaman = await this.prisma.peminjaman.findUnique({
+      where: { id },
+    });
+    if (!peminjaman || peminjaman.siswaId !== siswa.id) {
+      throw new NotFoundException('Peminjaman tidak ditemukan');
+    }
+    if (peminjaman.status !== 'DIPINJAM') {
+      throw new BadRequestException('Peminjaman ini belum disetujui/sudah selesai');
+    }
+    return this.doReturn(peminjaman.id, peminjaman.barangId, peminjaman.jumlah);
+  }
+
+  private async doReturn(id: number, barangId: number, jumlah: number) {
     return this.prisma.$transaction(async (tx) => {
       const updated = await tx.peminjaman.update({
         where: { id },
@@ -163,8 +184,8 @@ export class PeminjamanService {
         include: { barang: true },
       });
       await tx.barang.update({
-        where: { id: peminjaman.barangId },
-        data: { jumlahTersedia: { increment: peminjaman.jumlah } },
+        where: { id: barangId },
+        data: { jumlahTersedia: { increment: jumlah } },
       });
       return updated;
     });

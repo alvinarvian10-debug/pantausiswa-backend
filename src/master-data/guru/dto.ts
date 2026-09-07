@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsDateString,
   IsEmail,
   IsIn,
@@ -28,6 +29,12 @@ export class CreateGuruDto {
   @IsOptional() @IsString() noHp?: string;
   @IsOptional() @IsIn(['L', 'P']) jenisKelamin?: string;
   @IsOptional() @IsString() alamat?: string;
+
+  @IsOptional()
+  @IsArray()
+  @Type(() => Number)
+  @IsInt({ each: true })
+  mapelIds?: number[];
 }
 
 export class UpdateGuruDto {
@@ -37,4 +44,10 @@ export class UpdateGuruDto {
   @IsOptional() @IsString() noHp?: string;
   @IsOptional() @IsIn(['L', 'P']) jenisKelamin?: string;
   @IsOptional() @IsString() alamat?: string;
+
+  @IsOptional()
+  @IsArray()
+  @Type(() => Number)
+  @IsInt({ each: true })
+  mapelIds?: number[];
 }

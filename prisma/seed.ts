@@ -94,6 +94,25 @@ async function main() {
     siswaList.push(user);
   }
 
+  // ===== SEKRETARIS (satu per kelas) =====
+  const sekretarisData = [
+    { email: 'sekretaris.mipa1@sysch.id', nama: 'Sekretaris 10 MIPA 1', kelasId: kelas10.id },
+    { email: 'sekretaris.ips2@sysch.id', nama: 'Sekretaris 11 IPS 2', kelasId: kelas11.id },
+  ];
+  for (const sk of sekretarisData) {
+    await prisma.user.upsert({
+      where: { email: sk.email },
+      update: {},
+      create: {
+        email: sk.email,
+        password,
+        nama: sk.nama,
+        role: 'SEKRETARIS',
+        sekretaris: { create: { kelasId: sk.kelasId } },
+      },
+    });
+  }
+
   // ===== MAPEL =====
   const mapelNames = [
     ['Matematika', 'MAT'],
@@ -242,6 +261,7 @@ async function main() {
   console.log(`Admin : ${admin.email}`);
   console.log(`Guru  : ${guruUsers.map((g) => g.email).join(', ')}`);
   console.log(`Siswa : ${siswaData.map((s) => s.email).join(', ')}`);
+  console.log(`Sekretaris : ${sekretarisData.map((s) => s.email).join(', ')}`);
 }
 
 main()

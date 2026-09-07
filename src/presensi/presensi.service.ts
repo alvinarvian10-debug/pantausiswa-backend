@@ -77,8 +77,7 @@ export class PresensiService {
     };
   }
 
-  async rekapHarian(opts: { kelasId?: number; tanggal?: string }) {
-    const tanggal = opts.tanggal
+  async rekapHarian(opts: { kelasId?: number; tanggal?: string }) {    const tanggal = opts.tanggal
       ? new Date(opts.tanggal)
       : new Date(new Date().toISOString().slice(0, 10));
 
@@ -103,5 +102,75 @@ export class PresensiService {
       checkInAt: s.presensi[0]?.checkInAt ?? null,
       sudahCheckIn: s.presensi.length > 0,
     }));
+  }
+
+  /**
+   * Pencatatan manual oleh sekretaris (hanya kelasnya sendiri),
+   * guru, atau admin. Upsert per (siswaId, tanggal).
+   */
+  async catat(
+    pencatat: { userId: number; role: string },
+    dto: { siswaId: number; tanggal?: string; status: string; catatan?: string },
+  ) {
+    if (pencatat.role === 'SEKRETARIS') {
+      const sekretaris = await this.prisma.sekretaris.findUnique({
+        where: { userId: pencatat.userId },
+      });
+      if (!sekretaris) {
+        throw new ForbiddenException('Akun ini bukan sekretaris aktif');
+      }
+      const siswa = await this.prisma.siswa.findUnique({
+        where: { id: dto.siswaId },
+      });
+      if (!siswa || siswa.kelasId !== sekretaris.kelasId) {
+        throw new ForbiddenException(
+          'Anda hanya boleh mencatat presensi kelas Anda sendiri',
+        );
+      }
+    }
+
+    const tanggal = dto.tanggal
+      ? new Date(dto.tanggal)
+      : new Date(new Date().toISOString().slice(0, 10));
+
+    const existing = await this.prisma.presensi.findUnique({
+      where: { siswaId_tanggal: { siswaId: dto.siswaId, tanggal } },
+    });
+
+    const withCheckIn =
+      dto.status === 'HADIR' || dto.status === 'TERLAMBAT';
+
+    if (existing) {
+      return this.prisma.presensi.update({
+        where: { id: existing.id },
+        data: {
+          status: dto.status as never,
+          catatan: dto.catatan ?? existing.catatan,
+          checkInAt:
+            withCheckIn && !existing.checkInAt ? new Date() : existing.checkInAt,
+        },
+      });
+    }
+
+    return this.prisma.presensi.create({
+      data: {
+        siswaId: dto.siswaId,
+        tanggal,
+        status: dto.status as never,
+        checkInAt: withCheckIn ? new Date() : null,
+        catatan: dto.catatan ?? null,
+      },
+    });
+  }
+
+  /** Rekap harian khusus sekretaris — selalu lingkup kelasnya sendiri. */
+  async rekapSekretaris(sekretarisUserId: number, tanggal?: string) {
+    const sekretaris = await this.prisma.sekretaris.findUnique({
+      where: { userId: sekretarisUserId },
+    });
+    if (!sekretaris) {
+      throw new ForbiddenException('Akun ini bukan sekretaris aktif');
+    }
+    return this.rekapHarian({ kelasId: sekretaris.kelasId, tanggal });
   }
 }

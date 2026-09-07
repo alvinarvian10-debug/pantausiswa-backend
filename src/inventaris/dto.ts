@@ -25,6 +25,7 @@ export class CreateBarangDto {
 
   @IsOptional() @IsString() lokasi?: string;
   @IsOptional() @IsString() fotoUrl?: string;
+  @IsOptional() @IsString() icon?: string;
 }
 
 export class UpdateBarangDto {
@@ -35,4 +36,5 @@ export class UpdateBarangDto {
   @IsOptional() @Type(() => Number) @IsInt() @Min(0) jumlahTotal?: number;
   @IsOptional() @IsString() lokasi?: string;
   @IsOptional() @IsString() fotoUrl?: string;
+  @IsOptional() @IsString() icon?: string;
 }

@@ -13,6 +13,7 @@ enum Role {
   ADMIN
   GURU
   SISWA
+  SEKRETARIS
 }
 
 enum StatusPresensi {
@@ -67,6 +68,12 @@ enum StatusAduan {
   DITOLAK
 }
 
+enum StatusPasswordRequest {
+  MENUNGGU
+  DISETUJUI
+  DITOLAK
+}
+
 // ==================== AUTH & USER ====================
 
 model User {
@@ -80,8 +87,11 @@ model User {
 
   siswa    Siswa?
   guru     Guru?
+  sekretaris Sekretaris?
   aduan      Aduan[]          @relation("PelaporAduan")
   ditanggapi Aduan[]          @relation("PenanggapAduan")
+  pwDiminta  PasswordRequest[] @relation("PemintaPassword")
+  pwDireview PasswordRequest[] @relation("PereviewPassword")
 }
 
 // ==================== MASTER DATA ====================
@@ -100,6 +110,7 @@ model Guru {
   kelasDiampu  Kelas[]
   tugas        Tugas[]
   izinDireview PengajuanIzin[]
+  mapelDiampu  GuruMapel[]
 
   @@map("guru")
 }
@@ -115,6 +126,7 @@ model Kelas {
   wali   Guru?   @relation(fields: [waliId], references: [id], onDelete: SetNull)
   siswa  Siswa[]
   tugas  Tugas[]
+  sekretaris Sekretaris?
 
   @@map("kelas")
 }
@@ -142,14 +154,39 @@ model Siswa {
   @@map("siswa")
 }
 
+model Sekretaris {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  kelasId   Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kelas Kelas @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+
+  @@map("sekretaris")
+}
+
 model MataPelajaran {
   id   Int    @id @default(autoincrement())
   nama String @unique @db.VarChar(100)
   kode String @unique @db.VarChar(20)
 
   tugas Tugas[]
+  pengampu GuruMapel[]
 
   @@map("mata_pelajaran")
+}
+
+model GuruMapel {
+  guruId  Int
+  mapelId Int
+
+  guru  Guru          @relation(fields: [guruId], references: [id], onDelete: Cascade)
+  mapel MataPelajaran @relation(fields: [mapelId], references: [id], onDelete: Cascade)
+
+  @@id([guruId, mapelId])
+  @@map("guru_mapel")
 }
 
 // ==================== PRESENSI & IZIN ====================
@@ -242,6 +279,7 @@ model Barang {
   jumlahTersedia Int           @default(0)
   lokasi         String?       @db.VarChar(100)
   fotoUrl        String?       @db.VarChar(255)
+  icon           String?       @db.VarChar(50)
   createdAt      DateTime      @default(now())
   updatedAt      DateTime      @updatedAt
 
@@ -279,6 +317,7 @@ model Aduan {
   prioritas   PrioritasAduan @default(SEDANG)
   status      StatusAduan    @default(BARU)
   lampiranUrl String?        @db.VarChar(255)
+  isAnonim    Boolean        @default(false)
   tanggapan   String?        @db.Text
   penanggapId Int?
   createdAt   DateTime       @default(now())
@@ -289,4 +328,40 @@ model Aduan {
 
   @@index([status])
   @@map("aduan")
+}
+
+// ==================== PENGATURAN & PASSWORD ====================
+
+model Pengaturan {
+  id              Int      @id @default(1)
+  namaSekolah     String   @db.VarChar(191)
+  npsn            String   @db.VarChar(30)
+  alamat          String?  @db.Text
+  tahunAjaran     String   @db.VarChar(20)
+  semester        String   @db.VarChar(10)
+  kepalaSekolah   String?  @db.VarChar(191)
+  jamMasuk        String   @db.VarChar(5)
+  batasToleransi  Int      @default(15)
+  notifikasiWA    Boolean  @default(true)
+  notifikasiEmail Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+
+  @@map("pengaturan")
+}
+
+model PasswordRequest {
+  id           Int                   @id @default(autoincrement())
+  requesterId  Int
+  passwordHash String                @db.VarChar(255)
+  status       StatusPasswordRequest @default(MENUNGGU)
+  catatan      String?               @db.VarChar(255)
+  reviewerId   Int?
+  reviewedAt   DateTime?
+  createdAt    DateTime              @default(now())
+
+  requester User  @relation("PemintaPassword", fields: [requesterId], references: [id], onDelete: Cascade)
+  reviewer  User? @relation("PereviewPassword", fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@map("password_request")
 }

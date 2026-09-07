@@ -18,7 +18,7 @@ export class GuruService {
     if (exists) throw new ConflictException('Email sudah terdaftar');
 
     const hashed = await bcrypt.hash(dto.password, 10);
-    return this.prisma.user.create({
+    const created = await this.prisma.user.create({
       data: {
         email: dto.email,
         password: hashed,
@@ -35,6 +35,26 @@ export class GuruService {
       },
       include: { guru: true },
     });
+    if (dto.mapelIds?.length) {
+      await this.setMapel(created.guru!.id, dto.mapelIds);
+    }
+    return this.findOne(created.guru!.id);
+  }
+
+  /** Ganti daftar mapel yang diampu (id tak dikenal diabaikan). */
+  private async setMapel(guruId: number, mapelIds: number[]) {
+    const found = await this.prisma.mataPelajaran.findMany({
+      where: { id: { in: mapelIds } },
+      select: { id: true },
+    });
+    const valid = [...new Set(found.map((m) => m.id))];
+    await this.prisma.$transaction([
+      this.prisma.guruMapel.deleteMany({ where: { guruId } }),
+      this.prisma.guruMapel.createMany({
+        data: valid.map((mapelId) => ({ guruId, mapelId })),
+        skipDuplicates: true,
+      }),
+    ]);
   }
 
   async findAll(opts: { page?: number; limit?: number; search?: string }) {
@@ -57,7 +77,14 @@ export class GuruService {
       this.prisma.user.count({ where }),
       this.prisma.user.findMany({
         where,
-        include: { guru: { include: { kelasDiampu: true } } },
+        include: {
+          guru: {
+            include: {
+              kelasDiampu: true,
+              mapelDiampu: { include: { mapel: { select: { nama: true } } } },
+            },
+          },
+        },
         orderBy: { createdAt: 'desc' },
         skip: (page - 1) * limit,
         take: limit,
@@ -71,6 +98,7 @@ export class GuruService {
         nama: u.nama,
         email: u.email,
         ...u.guru,
+        mapel: (u.guru?.mapelDiampu ?? []).map((m) => m.mapel.nama),
       })),
       meta: { total, page, limit, totalPages: Math.ceil(total / limit) },
     };
@@ -82,19 +110,25 @@ export class GuruService {
       include: {
         user: { select: { id: true, nama: true, email: true, role: true } },
         kelasDiampu: true,
+        mapelDiampu: { include: { mapel: { select: { id: true, nama: true } } } },
       },
     });
     if (!guru) throw new NotFoundException('Data guru tidak ditemukan');
-    return guru;
+    const { mapelDiampu, ...rest } = guru;
+    return {
+      ...rest,
+      mapel: mapelDiampu.map((m) => m.mapel.nama),
+      mapelIds: mapelDiampu.map((m) => m.mapel.id),
+    };
   }
 
   async update(id: number, dto: UpdateGuruDto) {
     const guru = await this.prisma.guru.findUnique({ where: { id } });
     if (!guru) throw new NotFoundException('Data guru tidak ditemukan');
 
-    const { noHp, jenisKelamin, alamat, nip, ...userFields } = dto;
+    const { noHp, jenisKelamin, alamat, nip, mapelIds, ...userFields } = dto;
 
-    return this.prisma.$transaction(async (tx) => {
+    await this.prisma.$transaction(async (tx) => {
       if (Object.keys(userFields).length > 0) {
         await tx.user.update({ where: { id: guru.userId }, data: userFields });
       }
@@ -111,6 +145,10 @@ export class GuruService {
         include: { user: { select: { id: true, nama: true, email: true } }, kelasDiampu: true },
       });
     });
+    if (mapelIds !== undefined) {
+      await this.setMapel(id, mapelIds);
+    }
+    return this.findOne(id);
   }
 
   async remove(id: number) {

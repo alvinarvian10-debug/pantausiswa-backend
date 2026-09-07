@@ -61,4 +61,14 @@ export class PeminjamanController {
   kembalikan(@Param('id', ParseIntPipe) id: number) {
     return this.service.returnItem(id);
   }
+
+  /** Siswa mengembalikan pinjamannya sendiri */
+  @Post(':id/kembalikan')
+  @Roles(Role.SISWA)
+  kembalikanMandiri(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser('userId') userId: number,
+  ) {
+    return this.service.returnMandiri(id, userId);
+  }
 }

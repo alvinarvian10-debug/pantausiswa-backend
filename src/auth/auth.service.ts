@@ -1,5 +1,7 @@
 import {
+  BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -40,5 +42,22 @@ export class AuthService {
     });
     if (!user) throw new UnauthorizedException();
     return user;
+  }
+
+  /** Admin mengganti password akun lain (mis. menyetujui request sekretaris). */
+  async adminSetPassword(dto: { email?: string; userId?: number; newPassword: string }) {
+    if (!dto.email && !dto.userId) {
+      throw new BadRequestException('email atau userId wajib diisi');
+    }
+    const user = dto.userId
+      ? await this.prisma.user.findUnique({ where: { id: dto.userId } })
+      : await this.prisma.user.findUnique({ where: { email: dto.email! } });
+    if (!user) throw new NotFoundException('Akun tidak ditemukan');
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { password: await bcrypt.hash(dto.newPassword, 10) },
+    });
+    return { message: `Password ${user.email} berhasil diperbarui` };
   }
 }
