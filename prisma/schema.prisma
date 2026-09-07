@@ -1,0 +1,367 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// ==================== ENUM ====================
+
+enum Role {
+  ADMIN
+  GURU
+  SISWA
+  SEKRETARIS
+}
+
+enum StatusPresensi {
+  HADIR
+  TERLAMBAT
+  IZIN
+  SAKIT
+  ALPA
+}
+
+enum JenisIzin {
+  IZIN
+  SAKIT
+  DISPENSASI
+}
+
+enum StatusIzin {
+  MENUNGGU
+  DISETUJUI
+  DITOLAK
+}
+
+enum KondisiBarang {
+  BAIK
+  RUSAK_RINGAN
+  RUSAK_BERAT
+}
+
+enum StatusPeminjaman {
+  MENUNGGU
+  DIPINJAM
+  DIKEMBALIKAN
+  DITOLAK
+}
+
+enum KategoriAduan {
+  FASILITAS
+  ADMINISTRASI
+  LAINNYA
+}
+
+enum PrioritasAduan {
+  RENDAH
+  SEDANG
+  TINGGI
+}
+
+enum StatusAduan {
+  BARU
+  DIPROSES
+  SELESAI
+  DITOLAK
+}
+
+enum StatusPasswordRequest {
+  MENUNGGU
+  DISETUJUI
+  DITOLAK
+}
+
+// ==================== AUTH & USER ====================
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique @db.VarChar(191)
+  password  String   @db.VarChar(255)
+  nama      String   @db.VarChar(191)
+  role      Role     @default(SISWA)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  siswa    Siswa?
+  guru     Guru?
+  sekretaris Sekretaris?
+  aduan      Aduan[]          @relation("PelaporAduan")
+  ditanggapi Aduan[]          @relation("PenanggapAduan")
+  pwDiminta  PasswordRequest[] @relation("PemintaPassword")
+  pwDireview PasswordRequest[] @relation("PereviewPassword")
+}
+
+// ==================== MASTER DATA ====================
+
+model Guru {
+  id           Int      @id @default(autoincrement())
+  userId       Int      @unique
+  nip          String   @unique @db.VarChar(30)
+  noHp         String?  @db.VarChar(20)
+  jenisKelamin String?  @db.VarChar(1)
+  alamat       String?  @db.Text
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  user         User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kelasDiampu  Kelas[]
+  tugas        Tugas[]
+  izinDireview PengajuanIzin[]
+  mapelDiampu  GuruMapel[]
+
+  @@map("guru")
+}
+
+model Kelas {
+  id         Int      @id @default(autoincrement())
+  nama       String   @unique @db.VarChar(50) // contoh: "10 MIPA 1"
+  tingkat    String   @db.VarChar(10) // contoh: "10", "11", "12"
+  waliId     Int?     @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  wali   Guru?   @relation(fields: [waliId], references: [id], onDelete: SetNull)
+  siswa  Siswa[]
+  tugas  Tugas[]
+  sekretaris Sekretaris?
+
+  @@map("kelas")
+}
+
+model Siswa {
+  id           Int       @id @default(autoincrement())
+  userId       Int       @unique
+  nis          String    @unique @db.VarChar(30)
+  kelasId      Int?
+  jenisKelamin String?   @db.VarChar(1)
+  tanggalLahir DateTime?
+  alamat       String?   @db.Text
+  noHp         String?   @db.VarChar(20)
+  waliMurid    String?   @db.VarChar(191) // nama orang tua/wali
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kelas      Kelas?            @relation(fields: [kelasId], references: [id], onDelete: SetNull)
+  presensi   Presensi[]
+  izin       PengajuanIzin[]
+  tugasKumpul PengumpulanTugas[]
+  peminjaman Peminjaman[]
+
+  @@map("siswa")
+}
+
+model Sekretaris {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  kelasId   Int      @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  kelas Kelas @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+
+  @@map("sekretaris")
+}
+
+model MataPelajaran {
+  id   Int    @id @default(autoincrement())
+  nama String @unique @db.VarChar(100)
+  kode String @unique @db.VarChar(20)
+
+  tugas Tugas[]
+  pengampu GuruMapel[]
+
+  @@map("mata_pelajaran")
+}
+
+model GuruMapel {
+  guruId  Int
+  mapelId Int
+
+  guru  Guru          @relation(fields: [guruId], references: [id], onDelete: Cascade)
+  mapel MataPelajaran @relation(fields: [mapelId], references: [id], onDelete: Cascade)
+
+  @@id([guruId, mapelId])
+  @@map("guru_mapel")
+}
+
+// ==================== PRESENSI & IZIN ====================
+
+model Presensi {
+  id         Int            @id @default(autoincrement())
+  siswaId    Int
+  tanggal    DateTime       @db.Date
+  status     StatusPresensi @default(HADIR)
+  checkInAt  DateTime?
+  catatan    String?        @db.VarChar(255)
+
+  siswa Siswa @relation(fields: [siswaId], references: [id], onDelete: Cascade)
+
+  @@unique([siswaId, tanggal])
+  @@index([tanggal])
+  @@map("presensi")
+}
+
+model PengajuanIzin {
+  id             Int        @id @default(autoincrement())
+  siswaId        Int
+  jenis          JenisIzin  @default(IZIN)
+  tanggalMulai   DateTime   @db.Date
+  tanggalSelesai DateTime   @db.Date
+  keterangan     String     @db.VarChar(500)
+  lampiranUrl    String?    @db.VarChar(255)
+  status         StatusIzin @default(MENUNGGU)
+  reviewerId     Int?
+  catatanReview  String?    @db.VarChar(255)
+  reviewedAt     DateTime?
+  createdAt      DateTime   @default(now())
+
+  siswa    Siswa @relation(fields: [siswaId], references: [id], onDelete: Cascade)
+  reviewer Guru? @relation(fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@map("pengajuan_izin")
+}
+
+// ==================== TUGAS ====================
+
+model Tugas {
+  id          Int      @id @default(autoincrement())
+  judul       String   @db.VarChar(191)
+  deskripsi   String   @db.Text
+  guruId      Int
+  mapelId     Int
+  kelasId     Int
+  tenggat     DateTime
+  lampiranUrl String?  @db.VarChar(255)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  guru    Guru               @relation(fields: [guruId], references: [id], onDelete: Cascade)
+  mapel   MataPelajaran      @relation(fields: [mapelId], references: [id])
+  kelas   Kelas              @relation(fields: [kelasId], references: [id], onDelete: Cascade)
+  kumpulan PengumpulanTugas[]
+
+  @@map("tugas")
+}
+
+model PengumpulanTugas {
+  id          Int       @id @default(autoincrement())
+  tugasId     Int
+  siswaId     Int
+  fileUrl     String    @db.VarChar(255)
+  catatan     String?   @db.VarChar(255)
+  submittedAt DateTime  @default(now())
+  nilai       Int?
+  feedback    String?   @db.VarChar(255)
+  dinilaiAt   DateTime?
+
+  tugas Tugas @relation(fields: [tugasId], references: [id], onDelete: Cascade)
+  siswa Siswa @relation(fields: [siswaId], references: [id], onDelete: Cascade)
+
+  @@unique([tugasId, siswaId])
+  @@map("pengumpulan_tugas")
+}
+
+// ==================== INVENTARIS & PEMINJAMAN ====================
+
+model Barang {
+  id             Int           @id @default(autoincrement())
+  nama           String        @db.VarChar(100)
+  kode           String        @unique @db.VarChar(30)
+  kategori       String        @db.VarChar(50)
+  kondisi        KondisiBarang @default(BAIK)
+  jumlahTotal    Int           @default(0)
+  jumlahTersedia Int           @default(0)
+  lokasi         String?       @db.VarChar(100)
+  fotoUrl        String?       @db.VarChar(255)
+  icon           String?       @db.VarChar(50)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  peminjaman Peminjaman[]
+
+  @@map("barang")
+}
+
+model Peminjaman {
+  id             Int              @id @default(autoincrement())
+  barangId       Int
+  siswaId        Int
+  jumlah         Int              @default(1)
+  tanggalPinjam  DateTime         @default(now())
+  tanggalKembali DateTime         @db.Date
+  dikembalikanAt DateTime?
+  status         StatusPeminjaman @default(MENUNGGU)
+  catatan        String?          @db.VarChar(255)
+
+  barang Barang @relation(fields: [barangId], references: [id], onDelete: Cascade)
+  siswa  Siswa  @relation(fields: [siswaId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@map("peminjaman")
+}
+
+// ==================== PENGADUAN (TICKETING) ====================
+
+model Aduan {
+  id          Int            @id @default(autoincrement())
+  pelaporId   Int
+  judul       String         @db.VarChar(191)
+  deskripsi   String         @db.Text
+  kategori    KategoriAduan  @default(FASILITAS)
+  prioritas   PrioritasAduan @default(SEDANG)
+  status      StatusAduan    @default(BARU)
+  lampiranUrl String?        @db.VarChar(255)
+  isAnonim    Boolean        @default(false)
+  tanggapan   String?        @db.Text
+  penanggapId Int?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  pelapor   User  @relation("PelaporAduan", fields: [pelaporId], references: [id], onDelete: Cascade)
+  penanggap User? @relation("PenanggapAduan", fields: [penanggapId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@map("aduan")
+}
+
+// ==================== PENGATURAN & PASSWORD ====================
+
+model Pengaturan {
+  id              Int      @id @default(1)
+  namaSekolah     String   @db.VarChar(191)
+  npsn            String   @db.VarChar(30)
+  alamat          String?  @db.Text
+  tahunAjaran     String   @db.VarChar(20)
+  semester        String   @db.VarChar(10)
+  kepalaSekolah   String?  @db.VarChar(191)
+  jamMasuk        String   @db.VarChar(5)
+  batasToleransi  Int      @default(15)
+  notifikasiWA    Boolean  @default(true)
+  notifikasiEmail Boolean  @default(false)
+  updatedAt       DateTime @updatedAt
+
+  @@map("pengaturan")
+}
+
+model PasswordRequest {
+  id           Int                   @id @default(autoincrement())
+  requesterId  Int
+  passwordHash String                @db.VarChar(255)
+  status       StatusPasswordRequest @default(MENUNGGU)
+  catatan      String?               @db.VarChar(255)
+  reviewerId   Int?
+  reviewedAt   DateTime?
+  createdAt    DateTime              @default(now())
+
+  requester User  @relation("PemintaPassword", fields: [requesterId], references: [id], onDelete: Cascade)
+  reviewer  User? @relation("PereviewPassword", fields: [reviewerId], references: [id], onDelete: SetNull)
+
+  @@index([status])
+  @@map("password_request")
+}
