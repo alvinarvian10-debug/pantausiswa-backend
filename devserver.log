@@ -1,0 +1,118 @@
+npm notice run sysch-back@0.0.1 start:dev
+npm notice run nest start --watch
+[2J[3J[H[[90m18.44.48[0m] Starting compilation in watch mode...
+
+[[90m18.45.03[0m] Found 0 errors. Watching for file changes.
+
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[NestFactory] [39m[32mStarting Nest application...[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPrismaModule dependencies initialized[39m[38;5;3m +47ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPassportModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigHostModule dependencies initialized[39m[38;5;3m +77ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mThrottlerModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +5ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mConfigModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPresensiModule dependencies initialized[39m[38;5;3m +2ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAnalitikModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mImportModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPengaturanModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mJwtModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mSiswaModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mGuruModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mKelasModule dependencies initialized[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mMapelModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mIzinModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mTugasModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mInventarisModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPeminjamanModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAduanModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mPasswordRequestModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAppModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[InstanceLoader] [39m[32mAuthModule dependencies initialized[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAuthController {/api/auth}:[39m[38;5;3m +12ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/login, POST} route[39m[38;5;3m +5ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/me, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/auth/admin-set-password, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mSiswaController {/api/siswa}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/siswa, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/siswa, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/siswa/:id, GET} route[39m[38;5;3m +2ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/siswa/:id, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/siswa/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mGuruController {/api/guru}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guru, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guru, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guru/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guru/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/guru/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mKelasController {/api/kelas}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/kelas, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/kelas, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/kelas/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/kelas/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/kelas/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mMapelController {/api/mapel}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/mapel, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/mapel, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/mapel/:id, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/mapel/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/mapel/:id, DELETE} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPresensiController {/api/presensi}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/presensi/check-in, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/presensi/me, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/presensi/rekap, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/presensi/catat, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mIzinController {/api/izin}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/izin, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/izin/me, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/izin, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/izin/:id/review, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mTugasController {/api/tugas}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/saya, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/nilai-saya, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/:id/submissions, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/:id/submissions, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/tugas/submissions/:subId/nilai, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mInventarisController {/api/barang}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/barang, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/barang, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/barang/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/barang/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/barang/:id, DELETE} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPeminjamanController {/api/peminjaman}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/peminjaman, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/peminjaman/me, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/peminjaman, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/peminjaman/:id/review, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/peminjaman/:id/kembalikan, PATCH} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/peminjaman/:id/kembalikan, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAduanController {/api/aduan}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/aduan, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/aduan/me, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/aduan, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/aduan/:id, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/aduan/:id, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mAnalitikController {/api/analitik}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/analitik/ringkasan, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/analitik/kehadiran-tren, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/analitik/per-kelas, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/analitik/aduan-status, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/analitik/tugas, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/analitik/nilai, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mImportController {/api/import}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/import/siswa, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/import/guru, POST} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPengaturanController {/api/pengaturan}:[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/pengaturan, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/pengaturan, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RoutesResolver] [39m[32mPasswordRequestController {/api/password-requests}:[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/password-requests, POST} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/password-requests/me, GET} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/password-requests, GET} route[39m[38;5;3m +1ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[RouterExplorer] [39m[32mMapped {/api/password-requests/:id/review, PATCH} route[39m[38;5;3m +0ms[39m
+[32m[Nest] 9328  - [39m09/09/2026, 18.45.34 [32m    LOG[39m [38;5;3m[NestApplication] [39m[32mNest application successfully started[39m[38;5;3m +82ms[39m
+🚀 PantauSiswa API running at http://localhost:4000/api
