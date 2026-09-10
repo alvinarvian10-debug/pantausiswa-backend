@@ -33,12 +33,47 @@ export class PeminjamanService {
       throw new BadRequestException('Tanggal kembali tidak valid');
     }
 
+    const tanggalPinjamStart = dto.tanggalPinjam
+      ? new Date(dto.tanggalPinjam)
+      : null;
+    if (tanggalPinjamStart) {
+      const pinjamMid = new Date(
+        tanggalPinjamStart.getFullYear(),
+        tanggalPinjamStart.getMonth(),
+        tanggalPinjamStart.getDate(),
+      ).getTime();
+      const kembaliMid = new Date(
+        tanggalKembali.getFullYear(),
+        tanggalKembali.getMonth(),
+        tanggalKembali.getDate(),
+      ).getTime();
+      if (pinjamMid > kembaliMid) {
+        throw new BadRequestException(
+          'Tanggal pinjam harus lebih awal dari tanggal kembali',
+        );
+      }
+      // Hari yang sama legal selama jam kembali setelah jam pinjam.
+      if (
+        pinjamMid === kembaliMid &&
+        dto.jamPinjam &&
+        dto.jamKembali &&
+        dto.jamKembali <= dto.jamPinjam
+      ) {
+        throw new BadRequestException(
+          'Jam pengembalian harus setelah jam pinjam',
+        );
+      }
+    }
+
     return this.prisma.peminjaman.create({
       data: {
         barangId: dto.barangId,
         siswaId: siswa.id,
         jumlah: dto.jumlah,
+        tanggalPinjam: tanggalPinjamStart ?? new Date(),
         tanggalKembali,
+        jamPinjam: dto.jamPinjam ?? null,
+        jamKembali: dto.jamKembali ?? null,
         catatan: dto.catatan ?? null,
       },
       include: { barang: true },

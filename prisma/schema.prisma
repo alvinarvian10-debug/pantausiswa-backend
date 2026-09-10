@@ -295,6 +295,8 @@ model Peminjaman {
   jumlah         Int              @default(1)
   tanggalPinjam  DateTime         @default(now())
   tanggalKembali DateTime         @db.Date
+  jamPinjam      String?          @db.VarChar(5) // HH:MM saat pinjam mulai
+  jamKembali     String?          @db.VarChar(5) // HH:MM batas pengembalian
   dikembalikanAt DateTime?
   status         StatusPeminjaman @default(MENUNGGU)
   catatan        String?          @db.VarChar(255)
