@@ -2,16 +2,20 @@ import { Type } from 'class-transformer';
 import {
   ArrayMaxSize,
   IsArray,
+  IsNotEmpty,
   IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator';
 
 export class ImportSiswaRowDto {
+  // IsNotEmpty: cegah nama kosong/blank masuk DB (root cause nama blank).
   @IsString()
+  @IsNotEmpty({ message: 'nama wajib diisi' })
   nama: string;
 
   @IsString()
+  @IsNotEmpty({ message: 'nis wajib diisi' })
   nis: string;
 
   @IsOptional()
@@ -29,6 +33,7 @@ export class ImportSiswaDto {
 
 export class ImportGuruRowDto {
   @IsString()
+  @IsNotEmpty({ message: 'nama wajib diisi' })
   nama: string;
 
   @IsOptional()

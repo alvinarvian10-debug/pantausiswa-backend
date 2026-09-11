@@ -293,11 +293,19 @@ model Peminjaman {
   barangId       Int
   siswaId        Int
   jumlah         Int              @default(1)
+  // Pre-order: tanggal mulai pinjam boleh diisi future date dari frontend.
+  // @default(now()) dipertahankan agar data lama/seed tetap valid — Prisma
+  // mengizinkan override eksplisit saat create, jadi bukan restriksi.
   tanggalPinjam  DateTime         @default(now())
-  tanggalKembali DateTime         @db.Date
+  // Full DateTime (jam ikut tersimpan). Sebelumnya @db.Date memotong jam
+  // sehingga UI hanya bisa menampilkan tanggal saja.
+  tanggalKembali DateTime
   dikembalikanAt DateTime?
   status         StatusPeminjaman @default(MENUNGGU)
   catatan        String?          @db.VarChar(255)
+  // Task 3: info tambahan dari siswa. Nullable agar data lama/seed tetap valid.
+  alasan         String?          @db.VarChar(500)
+  bukti          String?          @db.VarChar(255)
 
   barang Barang @relation(fields: [barangId], references: [id], onDelete: Cascade)
   siswa  Siswa  @relation(fields: [siswaId], references: [id], onDelete: Cascade)

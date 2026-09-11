@@ -42,7 +42,7 @@ export class InventarisService {
       include: {
         peminjaman: {
           include: {
-            siswa: { include: { user: { select: { nama: true } } } },
+            siswa: { include: { user: { select: { nama: true, email: true } } } },
           },
           orderBy: { tanggalPinjam: 'desc' },
           take: 10,

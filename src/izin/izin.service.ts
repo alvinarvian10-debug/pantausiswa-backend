@@ -35,7 +35,7 @@ export class IzinService {
         keterangan: dto.keterangan,
         lampiranUrl: dto.lampiranUrl ?? null,
       },
-      include: { siswa: { include: { user: { select: { nama: true } } } } },
+      include: { siswa: { include: { user: { select: { nama: true, email: true } } } } },
     });
   }
 
@@ -87,11 +87,11 @@ export class IzinService {
         include: {
           siswa: {
             include: {
-              user: { select: { nama: true } },
+              user: { select: { nama: true, email: true } },
               kelas: { select: { nama: true } },
             },
           },
-          reviewer: { include: { user: { select: { nama: true } } } },
+          reviewer: { include: { user: { select: { nama: true, email: true } } } },
         },
         orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
         skip: (page - 1) * limit,

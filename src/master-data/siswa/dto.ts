@@ -53,8 +53,9 @@ export class CreateSiswaDto {
 
 export class UpdateSiswaDto {
   @IsOptional() @IsEmail() email?: string;
-  @IsOptional() @IsString() nama?: string;
-  @IsOptional() @IsString() nis?: string;
+  // IsNotEmpty bila field dikirim: cegah PATCH nama jadi '' (blank di UI).
+  @IsOptional() @IsString() @IsNotEmpty({ message: 'nama tidak boleh kosong' }) nama?: string;
+  @IsOptional() @IsString() @IsNotEmpty({ message: 'nis tidak boleh kosong' }) nis?: string;
   @IsOptional() @Type(() => Number) @IsInt() kelasId?: number;
   @IsOptional() @IsIn(['L', 'P']) jenisKelamin?: string;
   @IsOptional() @IsDateString() tanggalLahir?: string;

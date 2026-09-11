@@ -39,8 +39,8 @@ export class CreateGuruDto {
 
 export class UpdateGuruDto {
   @IsOptional() @IsEmail() email?: string;
-  @IsOptional() @IsString() nama?: string;
-  @IsOptional() @IsString() nip?: string;
+  @IsOptional() @IsString() @IsNotEmpty({ message: 'nama tidak boleh kosong' }) nama?: string;
+  @IsOptional() @IsString() @IsNotEmpty({ message: 'nip tidak boleh kosong' }) nip?: string;
   @IsOptional() @IsString() noHp?: string;
   @IsOptional() @IsIn(['L', 'P']) jenisKelamin?: string;
   @IsOptional() @IsString() alamat?: string;

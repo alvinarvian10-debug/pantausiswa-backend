@@ -86,7 +86,7 @@ export class PresensiService {
     const siswaList = await this.prisma.siswa.findMany({
       where: siswaWhere,
       include: {
-        user: { select: { nama: true } },
+        user: { select: { nama: true, email: true } },
         kelas: { select: { nama: true } },
         presensi: { where: { tanggal } },
       },

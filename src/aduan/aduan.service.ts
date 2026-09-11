@@ -21,7 +21,8 @@ export class AduanService {
         lampiranUrl: dto.lampiranUrl ?? null,
         isAnonim: dto.isAnonim ?? false,
       },
-      include: { pelapor: { select: { nama: true, role: true } } },
+      // email untuk fallback UI bila nama kosong (Task 2).
+      include: { pelapor: { select: { nama: true, email: true, role: true } } },
     });
   }
 
@@ -74,7 +75,7 @@ export class AduanService {
       this.prisma.aduan.count({ where }),
       this.prisma.aduan.findMany({
         where,
-        include: { pelapor: { select: { nama: true, role: true } } },
+        include: { pelapor: { select: { nama: true, email: true, role: true } } },
         orderBy: [{ status: 'asc' }, { createdAt: 'desc' }],
         skip: (page - 1) * limit,
         take: limit,
@@ -121,7 +122,7 @@ export class AduanService {
     return this.prisma.aduan.update({
       where: { id },
       data,
-      include: { pelapor: { select: { nama: true } } },
+      include: { pelapor: { select: { nama: true, email: true } } },
     });
   }
 }

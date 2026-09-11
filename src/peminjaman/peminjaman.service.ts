@@ -11,7 +11,11 @@ import { CreatePeminjamanDto, ReviewPeminjamanDto } from './dto';
 export class PeminjamanService {
   constructor(private prisma: PrismaService) {}
 
-  /** Siswa mengajukan peminjaman barang */
+  /**
+   * Siswa mengajukan peminjaman barang (status awal MENUNGGU).
+   * STOK TIDAK DIKURANGI di sini — hanya pengecekan ketersediaan.
+   * Pengurangan stok HANYA terjadi di review() saat admin APPROVE.
+   */
   async create(siswaUserId: number, dto: CreatePeminjamanDto) {
     const siswa = await this.prisma.siswa.findUnique({
       where: { userId: siswaUserId },
@@ -28,18 +32,40 @@ export class PeminjamanService {
       );
     }
 
+    // Pre-order logic: tanggalPinjam boleh hari ini atau future date.
+    // Bila tidak dikirim frontend, default ke sekarang (kompatibel data lama).
+    const tanggalPinjam = dto.tanggalPinjam
+      ? new Date(dto.tanggalPinjam)
+      : new Date();
+    if (Number.isNaN(tanggalPinjam.getTime())) {
+      throw new BadRequestException('Tanggal pinjam tidak valid');
+    }
     const tanggalKembali = new Date(dto.tanggalKembali);
+    if (Number.isNaN(tanggalKembali.getTime())) {
+      throw new BadRequestException('Tanggal kembali tidak valid');
+    }
+    // Batas kembali harus setelah tanggal mulai pinjam.
+    if (tanggalKembali <= tanggalPinjam) {
+      throw new BadRequestException(
+        'Tanggal batas kembali harus setelah tanggal mulai pinjam',
+      );
+    }
+    // Tanggal kembali tidak boleh di masa lalu (bandingkan awal hari ini).
     if (tanggalKembali < new Date(new Date().toDateString())) {
       throw new BadRequestException('Tanggal kembali tidak valid');
     }
 
+    // Sengaja TIDAK menyentuh barang.jumlahTersedia (tetap utuh saat MENUNGGU).
     return this.prisma.peminjaman.create({
       data: {
         barangId: dto.barangId,
         siswaId: siswa.id,
         jumlah: dto.jumlah,
+        tanggalPinjam,
         tanggalKembali,
-        catatan: dto.catatan ?? null,
+        catatan: dto.catatan?.trim() ? dto.catatan.trim() : null,
+        alasan: dto.alasan?.trim() ? dto.alasan.trim() : null,
+        bukti: dto.bukti?.trim() ? dto.bukti.trim() : null,
       },
       include: { barang: true },
     });
@@ -92,7 +118,8 @@ export class PeminjamanService {
           barang: true,
           siswa: {
             include: {
-              user: { select: { nama: true } },
+              // email ikut disertakan sebagai fallback bila nama kosong (Task 2).
+              user: { select: { nama: true, email: true } },
               kelas: { select: { nama: true } },
             },
           },

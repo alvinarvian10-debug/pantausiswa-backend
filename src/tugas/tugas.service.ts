@@ -97,7 +97,7 @@ export class TugasService {
         kelas: { select: { nama: true } },
         guru: { include: { user: { select: { nama: true } } } },
         kumpulan: {
-          include: { siswa: { include: { user: { select: { nama: true } } } } },
+          include: { siswa: { include: { user: { select: { nama: true, email: true } } } } },
         },
       },
     });
@@ -168,7 +168,7 @@ export class TugasService {
       where: { tugasId },
       include: {
         siswa: {
-          include: { user: { select: { nama: true } }, kelas: true },
+          include: { user: { select: { nama: true, email: true } }, kelas: true },
         },
       },
       orderBy: { submittedAt: 'asc' },
