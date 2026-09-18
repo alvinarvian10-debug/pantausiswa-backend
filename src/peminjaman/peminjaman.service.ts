@@ -32,8 +32,9 @@ export class PeminjamanService {
       );
     }
 
-    // Pre-order logic: tanggalPinjam boleh hari ini atau future date.
+    // Pre-order: tanggalPinjam boleh hari ini atau future date.
     // Bila tidak dikirim frontend, default ke sekarang (kompatibel data lama).
+    // Mendukung dua mode klien: full datetime-local maupun date-only + jam HH:MM.
     const tanggalPinjam = dto.tanggalPinjam
       ? new Date(dto.tanggalPinjam)
       : new Date();
@@ -44,15 +45,41 @@ export class PeminjamanService {
     if (Number.isNaN(tanggalKembali.getTime())) {
       throw new BadRequestException('Tanggal kembali tidak valid');
     }
-    // Batas kembali harus setelah tanggal mulai pinjam.
-    if (tanggalKembali <= tanggalPinjam) {
+    // Tanggal kembali tidak boleh di masa lalu (bandingkan awal hari ini).
+    if (tanggalKembali < new Date(new Date().toDateString())) {
+      throw new BadRequestException('Tanggal kembali tidak valid');
+    }
+
+    // Batas kembali harus setelah tanggal mulai pinjam (presisi hari).
+    // Hari yang sama legal selama jam kembali setelah jam pinjam, atau
+    // full-datetime kembali setelah pinjam bila jam tidak dikirim.
+    const pinjamMid = new Date(
+      tanggalPinjam.getFullYear(),
+      tanggalPinjam.getMonth(),
+      tanggalPinjam.getDate(),
+    ).getTime();
+    const kembaliMid = new Date(
+      tanggalKembali.getFullYear(),
+      tanggalKembali.getMonth(),
+      tanggalKembali.getDate(),
+    ).getTime();
+    if (kembaliMid < pinjamMid) {
       throw new BadRequestException(
         'Tanggal batas kembali harus setelah tanggal mulai pinjam',
       );
     }
-    // Tanggal kembali tidak boleh di masa lalu (bandingkan awal hari ini).
-    if (tanggalKembali < new Date(new Date().toDateString())) {
-      throw new BadRequestException('Tanggal kembali tidak valid');
+    if (kembaliMid === pinjamMid) {
+      if (dto.jamPinjam && dto.jamKembali) {
+        if (dto.jamKembali <= dto.jamPinjam) {
+          throw new BadRequestException(
+            'Jam pengembalian harus setelah jam pinjam',
+          );
+        }
+      } else if (tanggalKembali <= tanggalPinjam && dto.tanggalPinjam) {
+        throw new BadRequestException(
+          'Tanggal batas kembali harus setelah tanggal mulai pinjam',
+        );
+      }
     }
 
     // Sengaja TIDAK menyentuh barang.jumlahTersedia (tetap utuh saat MENUNGGU).
@@ -63,6 +90,8 @@ export class PeminjamanService {
         jumlah: dto.jumlah,
         tanggalPinjam,
         tanggalKembali,
+        jamPinjam: dto.jamPinjam ?? null,
+        jamKembali: dto.jamKembali ?? null,
         catatan: dto.catatan?.trim() ? dto.catatan.trim() : null,
         alasan: dto.alasan?.trim() ? dto.alasan.trim() : null,
         bukti: dto.bukti?.trim() ? dto.bukti.trim() : null,

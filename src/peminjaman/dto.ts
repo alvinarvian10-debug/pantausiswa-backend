@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  Matches,
   Min,
 } from 'class-validator';
 import { Type } from 'class-transformer';
@@ -25,6 +26,15 @@ export class CreatePeminjamanDto {
 
   @IsDateString({}, { message: 'tanggal kembali tidak valid' })
   tanggalKembali: string;
+
+  // Opsional HH:MM untuk UI berbasis jam terpisah (kompatibel date-only).
+  @IsOptional()
+  @Matches(/^\d{2}:\d{2}$/, { message: 'jamPinjam format HH:MM' })
+  jamPinjam?: string;
+
+  @IsOptional()
+  @Matches(/^\d{2}:\d{2}$/, { message: 'jamKembali format HH:MM' })
+  jamKembali?: string;
 
   @IsOptional()
   @IsString()

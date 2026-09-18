@@ -117,7 +117,14 @@ export class AduanService {
       }
     }
     if (dto.prioritas !== undefined) data.prioritas = dto.prioritas;
-    if (dto.tanggapan !== undefined) data.tanggapan = dto.tanggapan;
+    if (dto.tanggapan !== undefined) {
+      data.tanggapan = dto.tanggapan;
+      // Keluhan (non-fasilitas): begitu ditanggapi, langsung selesai.
+      if (aduan.kategori !== 'FASILITAS') {
+        data.status = 'SELESAI';
+        data.penanggapId = adminUserId;
+      }
+    }
 
     return this.prisma.aduan.update({
       where: { id },
