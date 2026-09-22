@@ -237,6 +237,11 @@ model Tugas {
   mapelId     Int
   kelasId     Int
   tenggat     DateTime
+  // Kapan tugas diberikan ke kelas (diisi guru; default saat dibuat bila kosong).
+  tanggalDiberikan DateTime? @default(now())
+  // Jadwal tatap muka target (opsional): hari + jam pelajaran, mis. "Senin", "07:00 - 08:30".
+  jadwalHari  String?  @db.VarChar(20)
+  jadwalJam   String?  @db.VarChar(30)
   lampiranUrl String?  @db.VarChar(255)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

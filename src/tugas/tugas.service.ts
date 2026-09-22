@@ -30,6 +30,9 @@ export class TugasService {
         mapelId: dto.mapelId,
         kelasId: dto.kelasId,
         tenggat: new Date(dto.tenggat),
+        tanggalDiberikan: dto.tanggalDiberikan ? new Date(dto.tanggalDiberikan) : new Date(),
+        jadwalHari: dto.jadwalHari?.trim() || null,
+        jadwalJam: dto.jadwalJam?.trim() || null,
         lampiranUrl: dto.lampiranUrl ?? null,
       },
       include: {
@@ -108,12 +111,13 @@ export class TugasService {
   async update(id: number, guruUserId: number, dto: UpdateTugasDto) {
     await this.ensureOwner(id, guruUserId);
     const data: Record<string, unknown> = {};
-    for (const key of ['judul', 'deskripsi', 'lampiranUrl'] as const) {
+    for (const key of ['judul', 'deskripsi', 'lampiranUrl', 'jadwalHari', 'jadwalJam'] as const) {
       if (dto[key] !== undefined) data[key] = dto[key];
     }
     if (dto.mapelId !== undefined) data.mapelId = dto.mapelId;
     if (dto.kelasId !== undefined) data.kelasId = dto.kelasId;
     if (dto.tenggat !== undefined) data.tenggat = new Date(dto.tenggat);
+    if (dto.tanggalDiberikan !== undefined) data.tanggalDiberikan = new Date(dto.tanggalDiberikan);
 
     return this.prisma.tugas.update({
       where: { id },

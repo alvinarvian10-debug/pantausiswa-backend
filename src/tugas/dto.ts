@@ -30,6 +30,18 @@ export class CreateTugasDto {
   tenggat: string;
 
   @IsOptional()
+  @IsDateString({}, { message: 'tanggal diberikan tidak valid' })
+  tanggalDiberikan?: string;
+
+  @IsOptional()
+  @IsString()
+  jadwalHari?: string;
+
+  @IsOptional()
+  @IsString()
+  jadwalJam?: string;
+
+  @IsOptional()
   @IsString()
   lampiranUrl?: string;
 }
@@ -40,6 +52,9 @@ export class UpdateTugasDto {
   @IsOptional() @Type(() => Number) @IsInt() mapelId?: number;
   @IsOptional() @Type(() => Number) @IsInt() kelasId?: number;
   @IsOptional() @IsDateString() tenggat?: string;
+  @IsOptional() @IsDateString() tanggalDiberikan?: string;
+  @IsOptional() @IsString() jadwalHari?: string;
+  @IsOptional() @IsString() jadwalJam?: string;
   @IsOptional() @IsString() lampiranUrl?: string;
 }
 
