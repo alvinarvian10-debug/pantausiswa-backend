@@ -7,6 +7,28 @@ import {
 import { PrismaService } from '../prisma/prisma.module';
 import { CreatePeminjamanDto, ReviewPeminjamanDto } from './dto';
 
+/** Status aktif vs histori peminjaman (DIBATALKAN dicadangkan utk perluasan enum). */
+const ACTIVE_STATUSES = ['MENUNGGU', 'DIPINJAM'] as const;
+const HISTORY_STATUSES = ['DIKEMBALIKAN', 'DITOLAK'] as const;
+const ALL_KNOWN_STATUSES = [...ACTIVE_STATUSES, ...HISTORY_STATUSES] as const;
+
+/**
+ * ?type=active -> status IN (MENUNGGU, DIPINJAM)
+ * ?type=history -> status IN (DIKEMBALIKAN, DITOLAK)
+ * ?status=X (legacy, single) tetap didukung bila ?type= tidak dikirim.
+ */
+function resolvePeminjamanStatus(opts: { status?: string; type?: string }) {
+  if (opts.type === 'active') return { in: [...ACTIVE_STATUSES] } as never;
+  if (opts.type === 'history') return { in: [...HISTORY_STATUSES] } as never;
+  if (
+    opts.status &&
+    (ALL_KNOWN_STATUSES as readonly string[]).includes(opts.status)
+  ) {
+    return opts.status as never;
+  }
+  return undefined;
+}
+
 @Injectable()
 export class PeminjamanService {
   constructor(private prisma: PrismaService) {}
@@ -102,7 +124,7 @@ export class PeminjamanService {
 
   async myHistory(
     siswaUserId: number,
-    opts: { page?: number; limit?: number },
+    opts: { page?: number; limit?: number; status?: string; type?: string },
   ) {
     const siswa = await this.prisma.siswa.findUnique({
       where: { userId: siswaUserId },
@@ -112,10 +134,16 @@ export class PeminjamanService {
     const page = opts.page && opts.page > 0 ? opts.page : 1;
     const limit = Math.min(opts.limit && opts.limit > 0 ? opts.limit : 20, 100);
 
+    // type=active -> MENUNGGU + DIPINJAM, type=history -> DIKEMBALIKAN + DITOLAK.
+    // (DIBATALKAN dicadangkan bila enum StatusPeminjaman diperluas.)
+    const statusFilter = resolvePeminjamanStatus(opts);
+    const where: Record<string, unknown> = { siswaId: siswa.id };
+    if (statusFilter !== undefined) where.status = statusFilter;
+
     const [total, data] = await this.prisma.$transaction([
-      this.prisma.peminjaman.count({ where: { siswaId: siswa.id } }),
+      this.prisma.peminjaman.count({ where }),
       this.prisma.peminjaman.findMany({
-        where: { siswaId: siswa.id },
+        where,
         include: { barang: true },
         orderBy: { tanggalPinjam: 'desc' },
         skip: (page - 1) * limit,
@@ -129,15 +157,18 @@ export class PeminjamanService {
     };
   }
 
-  async findAll(opts: { status?: string; page?: number; limit?: number }) {
+  async findAll(opts: {
+    status?: string;
+    type?: string;
+    page?: number;
+    limit?: number;
+  }) {
     const page = opts.page && opts.page > 0 ? opts.page : 1;
     const limit = Math.min(opts.limit && opts.limit > 0 ? opts.limit : 20, 100);
 
-    const where =
-      opts.status &&
-      ['MENUNGGU', 'DIPINJAM', 'DIKEMBALIKAN', 'DITOLAK'].includes(opts.status)
-        ? { status: opts.status as never }
-        : {};
+    const statusFilter = resolvePeminjamanStatus(opts);
+    const where: Record<string, unknown> =
+      statusFilter !== undefined ? { status: statusFilter } : {};
 
     const [total, data] = await this.prisma.$transaction([
       this.prisma.peminjaman.count({ where }),

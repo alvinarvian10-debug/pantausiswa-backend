@@ -21,6 +21,7 @@ export class QueryListDto {
   @IsOptional() @Type(() => Number) @IsInt() page?: number;
   @IsOptional() @Type(() => Number) @IsInt() limit?: number;
   @IsOptional() status?: string;
+  @IsOptional() type?: string;
 }
 
 @Controller('peminjaman')
