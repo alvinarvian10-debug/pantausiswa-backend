@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `tugas` ADD COLUMN `jadwalHari` VARCHAR(20) NULL,
+    ADD COLUMN `jadwalJam` VARCHAR(30) NULL,
+    ADD COLUMN `tanggalDiberikan` DATETIME(3) NULL DEFAULT CURRENT_TIMESTAMP(3);
